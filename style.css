@@ -16,12 +16,15 @@ body {
   background: #fff;
 
   /* Use whichever works best for you */
+  /* per definire un'altezza delle colonne */
   min-block-size: 100vh;
   min-block-size: 100dvh;
   min-block-size: 100svh;
 
   display: grid;
   grid-template-columns:
+  /* nomi alle linee di separazione delle colonne */
+  /* 2 colonne una di 5rem ed una che occupa lo spazio rimanente */
     [sidebar-start]
     5rem
     [sidebar-end main-start]
@@ -36,6 +39,7 @@ h1 {
 }
 
 .sidebar {
+  /* definizione dell'area che deve essere occupata */
   grid-column: sidebar;
   color: #fff;
   background-color: #1d1d29;
@@ -54,19 +58,27 @@ h1 {
 }
 
 /* Photo Gallery */
+/* container delle images */
 .gallery {
   display: grid;
+  /* ogni colonna ha una larghezza minima di 12.5rem ed una massima di 1fr */
+  /* auto-fit permette di generare il giusto numero di colonne per riempire lo spazio a disposizione, se non conosciamo il numero esatto di colonne lo farà il browser per noi  */
   grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
   grid-auto-rows: 12.5rem;
+  /* dato che le immagini occupano aree di grandezze diverse avrei spazi vuoti, con questa proprietà faccio in modo che le immagini vengano raggruppate al meglio, per non lasciarne */
   grid-auto-flow: dense;
   gap: 0.75rem;
 }
 
 .gallery figure {
   /* container-type: inline-size; */
+  /* shorthand per creare un container ed applicare una media query su di lui */
+  /* mi serve per far diventare visibile la caption dopo una certa larghezza */
   container: figure / inline-size;
+  /* settando overflow hidden impediamo all'immagine di espandersi al di fuori del suo contenitore quando si aumenta il valore di scale dato dalla transition in hover */
   overflow: hidden;
 
+  /* ogni elemento figure sarà un contenitore grid con una colonna ed una riga */
   display: grid;
   /* grid-template-columns: 1fr; */
   /* grid-template-rows: 1fr; */
@@ -76,17 +88,22 @@ h1 {
     to prevent the grid blowout,
     set the minimum to zero.
   */
+
+  /* se lasciamo il min value auto non può essere inferiore al suo content, quindi dobbiamo settare il min a 0 */
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr);
 }
 
 .gallery img {
+  /* l'immagine riempie tutto lo spazio del suo contenitore */
   inline-size: 100%;
   block-size: 100%;
+  /* per non avere distorsioni dell'immagine */
   object-fit: cover;
 
   /* grid-row: 1 / -1; */
   /* grid-column: 1 / -1; */
+  /* ogni immagine occupa tutta la riga e tutta la colonna del contenitore */
   grid-area: 1 / 1 / -1 / -1;
 
   transition: scale 1s ease-in-out;
@@ -97,8 +114,10 @@ h1 {
 }
 
 .gallery figcaption {
+  /* spazio occupato dalla caption */
   grid-area: 1 / 1 / -1 / -1;
   align-self: end;
+  /* per essere sovrapposto all'immagine */
   z-index: 1;
 
   padding: 3em 15% 1em 1em;
@@ -106,10 +125,13 @@ h1 {
   font-size: 0.875rem;
   line-height: 1.3;
   background: linear-gradient(transparent 25%, rgb(0 0 0 / 0.75));
+  /* caption non visibile se non dopo una certa larghezza */
   display: none;
 }
 
+/* media query per il container */
 @container figure (width > 20rem) {
+  /* la caption diventa visibile solo dopo una certa larghezza del container in cui è contenuta */
   .gallery figcaption {
     display: block;
   }
@@ -125,6 +147,7 @@ h1 {
   text-overflow: ellipsis;
 }
 
+/* mettiamo queste dimensioni in un layout minimo in modo da non avere problemi di visualizzazione quando non c'è abbastanza spazio in larghezza e si perderebbero i rapporti fra le larghezze delle colonne */
 @media (width > 600px) {
   .gallery figure:nth-child(1) {
     grid-area: span 2 / span 2;
